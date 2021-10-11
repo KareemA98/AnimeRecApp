@@ -7,7 +7,8 @@ const PORT = process.env.PORT || 3001;
 const app = express();
 
 app.get("/api", async (req, res) => {
-    const data = await apiCalls.getDataAboutAnime()
+    const data = await apiCalls.anotherTry()
+    console.log(data)
     res.send(data);
   });
 
