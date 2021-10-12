@@ -2,11 +2,13 @@ import logo from './logo.svg';
 import './App.css';
 import { Box, Wrap, Center, Flex, Button } from "@chakra-ui/react"
 import React from "react";
+import TagView from './TagView';
 
 function App() {
   const [data, setData] = React.useState({});
   const [tan, setTan] = React.useState(8);
   const [tags, setTags] = React.useState([{ name: "fsfdsdf" }])
+  const [main, setMain] = React.useState("main")
   const positon = [
     { top: "100px", left: "200px" },
     { top: "100px", left: "600px" },
@@ -33,13 +35,17 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
+        {
+         main == "main" ? 
         <Box borderRadius="50%" border="1px" w="150px" h="150px" color="white">
           {
             Object.entries(data).map((key, index) =>
-              <Button colorScheme="whiteAlpha" size="md" justify="center" alignContent="center" flexDirection="column" pos="absolute" style={positon[index]} borderRadius="50%" border="1px" width="150px" height="150px">{key[0]}</Button>
+              <Button colorScheme="whiteAlpha" size="md" justify="center" alignContent="center" flexDirection="column" pos="absolute" style={positon[index]} onClick={()=> setMain(key[0])} borderRadius="50%" border="1px" width="150px" height="150px">{key[0]}</Button>
             )
           }
-        </Box>
+        </Box> :
+        <TagView tag={main} data={data[main]} main={setMain}/>
+}
       </header>
     </div>
   );
