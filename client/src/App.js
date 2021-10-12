@@ -40,7 +40,7 @@ function App() {
         <Box borderRadius="50%" border="1px" w="150px" h="150px" color="white">
           {
             Object.entries(data).map((key, index) =>
-              <Button colorScheme="whiteAlpha" size="md" justify="center" alignContent="center" flexDirection="column" pos="absolute" style={positon[index]} onClick={()=> setMain(key[0])} borderRadius="50%" border="1px" width="150px" height="150px">{key[0]}</Button>
+              <Button colorScheme="whiteAlpha" size="md" pos="absolute" style={positon[index]} onClick={()=> setMain(key[0])} borderRadius="50%" border="1px" width="150px" height="150px">{key[0]}</Button>
             )
           }
         </Box> :
