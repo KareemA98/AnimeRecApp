@@ -1,17 +1,47 @@
 const { response } = require("express");
 const express = require("express");
 const apiCalls = require("./apiCalls");
+const randomstring = require("randomstring");
+const crypto = require("crypto");
+const base64url = require("base64url");
+const axios = require("axios")
+const querystring = require('querystring');
+const authWithMAL = require('./authWithMAL')
 
 const PORT = process.env.PORT || 3001;
 
+
 const app = express();
 
-app.get("/api", async (req, res) => {
-    const data = await apiCalls.anotherTry()
-    console.log(data)
-    res.send(data);
-  });
+app.use(express.json());
 
-app.listen(PORT, () => {
-  console.log(`Server listening on ${PORT}`);
-});
+const { MongoClient } = require('mongodb');
+const url = "mongodb+srv://admin:foo@ara-database.8aiy8.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+const client = new MongoClient(url);
+
+client.connect()
+.then(client=>{
+  console.log("Connected correctly to server")
+  const db = client.db("ara-database")
+
+  app.post("/getImage", async (req, res) => {
+    console.log(req.body)
+    const data = await apiCalls.getImage(req.body.malID, req.body.session, db)
+    res.send({data:data})
+  });
+  
+  app.post("/auth", async (req, res) => {
+    const data = await authWithMAL.SessionCreation(req.body.code, req.body.challenge)
+    res.send(data)
+  });
+  
+  app.get("/api", async (req, res) => {
+    const data = await apiCalls.anotherTry()
+    res.send(data)
+  });
+  
+  
+  app.listen(PORT, () => {
+    console.log(`Server listening on ${PORT}`);
+  });
+})
