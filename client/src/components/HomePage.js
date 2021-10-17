@@ -1,6 +1,6 @@
 
 import { Box, Flex, Text, Input, Button, Spacer, VStack, InputGroup, InputLeftAddon, InputRightAddon, InputRightElement, Spinner } from '@chakra-ui/react'
-import { BrowserRouter as Router, Switch, Route, Redirect, useHistory, useRouteMatch } from 'react-router-dom'
+import { BrowserRouter as Router, Switch, Route, Redirect, useHistory, useRouteMatch, Link } from 'react-router-dom'
 import React from 'react';
 import axios from 'axios';
 import ShowPage from './ShowPage';
@@ -49,7 +49,7 @@ const HomePage = () => {
                     {suggestions.map(val => <Box as="button" bg="white" w="100%">{val}</Box>)}
                 </VStack>
             </Box>
-
+            <Link to="/courses"> asdasdad </Link>
             <Button onClick={() => history.push(value)}>Submit</Button>
         </VStack>
     )
