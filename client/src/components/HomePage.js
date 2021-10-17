@@ -40,7 +40,7 @@ const HomePage = () => {
 
             <Box w="50%" >
                 <InputGroup bg="white" size="sm">
-                    <Input onBlur={getAutoCompleteResults} value={value} onChange={(e) => { console.log(e.target.value); setValue(e.target.value) }} placeholder="mysite" />
+                    <Input value={value} onChange={(e) => { console.log(e.target.value); setValue(e.target.value) }} placeholder="mysite" />
                     <InputRightElement>
                         {loading == "asda" ? <Spinner /> : null}
                     </InputRightElement>
