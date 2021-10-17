@@ -46,7 +46,7 @@ const HomePage = () => {
                     </InputRightElement>
                 </InputGroup>
                 <VStack p={4}>
-                    {suggestions.map(val => <Box as="button" bg="white" w="100%">{val}</Box>)}
+                    {/* {suggestions.map(val => <Box as="button" bg="white" w="100%">{val}</Box>)} */}
                 </VStack>
             </Box>
             <Link to="/courses"> asdasdad </Link>
