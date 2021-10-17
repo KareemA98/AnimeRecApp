@@ -8,8 +8,9 @@ import cryptoRandomString from 'crypto-random-string';
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
 import Home from './components/HomePage';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, useHistory } from 'react-router-dom';
 import ShowPage from './components/ShowPage';
+import NavBar from './components/NavBar';
 
 function App() {
   const [anime, setAnime] = React.useState("anime")
@@ -17,6 +18,7 @@ function App() {
   const [loggedIn, setLoggedIn] = React.useState(false)
   const [tan, setTan] = React.useState(8);
   const [cookies, setCookie, removeCookie] = useCookies(['challenge', 'session']);
+  const history = useHistory();
 
   // Here we define our query as a multi-line string
   // Storing it in a separate .graphql/.gql file is also possible
@@ -41,18 +43,12 @@ function App() {
   }
 
   return (
-    <Box h="100vh" margin="0px" bg="gray.800">
-      <Flex bg="gray.500" justify="flex-end" padding={1}>
-        <Text fontSize="30px">ARA-ARA</Text>
-        <Spacer/>
-        <Text fontSize="30px">{anime}</Text>
-        <Spacer/>
-        <Text fontSize="30px">{tag}</Text>
-        <Spacer/>
-        <Button m={2} onClick={() => doAuth()}>Login to MAL</Button>
-      </Flex>
-      <Home setAnime={setAnime} setTags={setTags} />
-    </Box>
+    <Router>
+      <Box h="100vh" margin="0px" bg="gray.800">
+        <NavBar anime={anime} tag={tag}/>
+        <Home setAnime={setAnime} setTags={setTags} />
+      </Box>
+    </Router>
 
   );
 }

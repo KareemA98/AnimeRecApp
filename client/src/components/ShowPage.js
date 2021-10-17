@@ -6,8 +6,19 @@ import axios from 'axios';
 import { useCookies } from 'react-cookie';
 import TagView from "./TagView";
 import { useHistory, useRouteMatch, BrowserRouter as Router, Switch, Route, useParams } from "react-router-dom";
+import {
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalFooter,
+    ModalBody,
+    ModalCloseButton,
+    Lorem,
+    useDisclosure
+} from "@chakra-ui/react"
 
-const ShowPage = ({setAnime, setTags}) => {
+const ShowPage = ({ setAnime, setTags }) => {
     let params = useParams()
     setAnime(params.value)
     console.log(params)
@@ -17,15 +28,12 @@ const ShowPage = ({setAnime, setTags}) => {
     const [session, setSession] = React.useState(cookies.session);
     const [tag, setTag] = React.useState("")
     const history = useHistory()
+    const { isOpen, onOpen, onClose } = useDisclosure()
     let { path, url } = useRouteMatch();
     console.log([path, url])
     React.useEffect(() => {
-        fetch("/api")
-            .then((res) => res.json())
-            .then((data) => {
-                setData(data)
-            }
-            );
+        axios({ method: "post", url: "/getShow", data: { show: params.value } })
+            .then((res) => setData(res.data))
     }, []);
     return (
         <>
@@ -37,7 +45,7 @@ const ShowPage = ({setAnime, setTags}) => {
                     <Flex wrap>
                         {
                             data.map((key, index) =>
-                                <Button colorScheme="whiteAlpha" size="md" onClick={() => { setTag(key.name); history.push(url + '/' + key.name)}} borderRadius="50%" border="1px" width="150px" height="150px">{key.name}</Button>
+                                <Button colorScheme="whiteAlpha" size="md" onClick={() => { setTag(key.name); history.push(url + '/' + key.name) }} borderRadius="50%" border="1px" width="150px" height="150px">{key.name}</Button>
                             )
                         }
                     </Flex>

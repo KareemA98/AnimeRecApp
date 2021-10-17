@@ -39,13 +39,20 @@ client.connect()
     res.json(data)
   })
 
+  app.get("/search", async (req, res) => {
+    console.log(req.query.term)
+    const data = await apiCalls.search(req.query.term)
+    const justNames = data.data.Page.media.map((show => show.title.english ? show.title.english : show.title.romaji)) 
+    res.send(justNames)
+  })
+
   app.post("/auth", async (req, res) => {
     const data = await authWithMAL.SessionCreation(req.body.code, req.body.challenge)
     res.send(data)
   });
   
-  app.get("/api", async (req, res) => {
-    const data = await apiCalls.anotherTry()
+  app.post("/getShow", async (req, res) => {
+    const data = await apiCalls.anotherTry(req.body.show)
     res.send(data)
   });
 

@@ -16,16 +16,33 @@ query ($id: Int) { # Define which variables will be used in the query (id)
 }
 `;
 
+var SearchQuery = `
+query ($anime: String) {
+  Page(page: 1, perPage: 10) {
+    pageInfo {
+      total
+    }
+    media(search: $anime, type: ANIME) {
+      title {
+        romaji
+        english
+        native
+      }
+    }
+  }
+}
+`
+
 var NarutoQuery = `
- { 
-  Media (search: "Naruto" type: ANIME) { 
+query ($anime: String) {
+  Media(search: $anime, type: ANIME) {
     id
     genres
     seasonYear
     type
-    tags{
-        id
-        name
+    tags {
+      id
+      name
     }
     title {
       romaji
@@ -44,6 +61,18 @@ query($tag: String){
     media(tag: $tag, type: ANIME, sort:POPULARITY_DESC) {
       id
       idMal
+      trailer {
+        id
+        site
+      }
+      description
+      status
+      externalLinks {
+        id
+        site
+        url
+      }
+      episodes
       genres
       seasonYear
       coverImage {
@@ -71,10 +100,21 @@ query($tag: String){
 }
 `;
 
-exports.anotherTry = async () => {
-  const response = await axios({ method: "post", url: 'https://graphql.anilist.co', data: { query: NarutoQuery, variables: {} } });
-  const tags = response.data.data.Media.tags;
-  return tags
+exports.anotherTry = async (show) => {
+  return axios({ method: "post", url: 'https://graphql.anilist.co', data: { query: NarutoQuery, variables: {anime:show} } })
+  .then (res => {
+    console.log(res.data)
+    return res.data.data.Media.tags
+  })
+  .catch(err => console.log(err))
+}
+
+exports.search = (term) => {
+  return axios({method:"post", url:'https://graphql.anilist.co', data:{ query: SearchQuery, variables:{anime:term}}})
+  .then(res => {
+    console.log(res.data)
+    return res.data
+  } )
 }
 
 exports.getTagsInfo = async (tag) => {

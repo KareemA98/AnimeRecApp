@@ -44,7 +44,7 @@ const TagView = ({setTags}) => {
             </Flex>
             <Wrap m= {2} h="10px" w="90%">
                 {data.map((ani, index) =>
-                    <ShowCircles img={ani.coverImage.large}>
+                    <ShowCircles data={ani} img={ani.coverImage.large}>
                     </ShowCircles>)
                 }
             </Wrap>
