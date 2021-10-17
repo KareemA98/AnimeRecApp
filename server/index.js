@@ -24,6 +24,8 @@ client.connect()
   console.log("Connected correctly to server")
   const db = client.db("ara-database")
 
+  app.use(express.static(path.resolve(__dirname, '../client/build')));
+
   app.post("/getImage", async (req, res) => {
     console.log(req.body)
     const data = await apiCalls.getImage(req.body.malID, req.body.session, db)
@@ -46,6 +48,9 @@ client.connect()
     res.send(data)
   });
   
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));
+  });
   
   app.listen(PORT, () => {
     console.log(`Server listening on ${PORT}`);
