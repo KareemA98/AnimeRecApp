@@ -37,7 +37,18 @@ client.connect()
     console.log(req.body)
     const data = await apiCalls.getTagsInfo(req.body.tag)
     res.json(data)
+  });
+
+
+  app.post("/getMALList", async (req, res) => {
+    const data = await apiCalls.getMALList(req.body.session, db)
+    const obj = {} 
+    data.forEach(element => {
+      obj[element.node.id] = element.list_status.status
+    });
+    res.send(obj)
   })
+
 
   app.get("/search", async (req, res) => {
     console.log(req.query.term)

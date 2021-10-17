@@ -23,19 +23,31 @@ function App() {
   // Here we define our query as a multi-line string
   // Storing it in a separate .graphql/.gql file is also possible
   React.useEffect(() => {
-    const urlSearchParams = new URLSearchParams(window.location.search);
-    const params = Object.fromEntries(urlSearchParams.entries());
-    console.log(params)
-    if (params.code == undefined) {
-      console.log("und")
+    console.log(cookies.session)
+    if (cookies.session) {
+      setLoggedIn(true)
     } else {
-      axios({ url: "/auth", method: "post", data: { challenge: cookies.challenge, code: params.code } })
-        .then((res) => {
-          setCookie('session', res.data)
-          setLoggedIn(true)
-        })
+      const urlSearchParams = new URLSearchParams(window.location.search);
+      const params = Object.fromEntries(urlSearchParams.entries());
+      console.log(params)
+      if (params.code == undefined) {
+        console.log("und")
+      } else {
+        axios({ url: "/auth", method: "post", data: { challenge: cookies.challenge, code: params.code } })
+          .then((res) => {
+            setCookie('session', res.data)
+            setLoggedIn(true)
+          })
+      }
     }
   }, []);
+  React.useEffect(() => {
+    if(loggedIn){
+      axios({url:"getMALList", method:"post", data:{session: cookies.session}})
+      .then(res => console.log(res))
+      .catch(err => console.log(err))
+    }
+  }, [loggedIn]);
   const doAuth = () => {
     const code_verifier = cryptoRandomString({ length: 128, type: 'url-safe' });
     setCookie('challenge', code_verifier)
@@ -45,7 +57,7 @@ function App() {
   return (
     <Router>
       <Box h="100vh" margin="0px" bg="gray.800">
-        <NavBar anime={anime} tag={tag}/>
+        <NavBar anime={anime} tag={tag} doAuth={doAuth} loggedIn={loggedIn} />
         <Home setAnime={setAnime} setTags={setTags} />
       </Box>
     </Router>

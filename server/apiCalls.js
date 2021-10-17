@@ -102,26 +102,49 @@ query($tag: String){
 `;
 
 exports.anotherTry = async (show) => {
-  return axios({ method: "post", url: 'https://graphql.anilist.co', data: { query: NarutoQuery, variables: {anime:show} } })
-  .then (res => {
-    console.log(res.data)
-    return res.data.data.Media.tags
-  })
-  .catch(err => console.log(err))
+  return axios({ method: "post", url: 'https://graphql.anilist.co', data: { query: NarutoQuery, variables: { anime: show } } })
+    .then(res => {
+      return res.data.data.Media.tags
+    })
+    .catch(err => console.log(err))
 }
 
 exports.search = (term) => {
-  return axios({method:"post", url:'https://graphql.anilist.co', data:{ query: SearchQuery, variables:{anime:term}}})
-  .then(res => {
-    console.log(res.data)
-    return res.data
-  } )
+  return axios({ method: "post", url: 'https://graphql.anilist.co', data: { query: SearchQuery, variables: { anime: term } } })
+    .then(res => {
+      return res.data
+    })
 }
 
 exports.getTagsInfo = async (tag) => {
- const response = await axios({ method: "post", url: 'https://graphql.anilist.co', data: { query: TagQuery, variables: { tag: tag } } })
- return response.data
+  const response = await axios({ method: "post", url: 'https://graphql.anilist.co', data: { query: TagQuery, variables: { tag: tag } } })
+  return response.data
 }
+const getList = async (token, offset) => {
+  return axios({ method: "get", url: `https://api.myanimelist.net/v2/users/@me/animelist?offset=${offset}&status=completed&fields=list_status`, headers: { Authorization: `Bearer ${token}` } })
+    .then((res) => {
+      return res.data.data
+    })
+    .catch(err => console.log(err))
+}
+
+const entireMALList = async (acc, offset = 0) =>{
+  const results = await getList(acc, offset)
+  console.log("Retreiving data from API for numbers : " + offset);
+  if (results.length>0) {
+    return results.concat(await entireMALList(acc, offset+10));
+  } else {
+    return results;
+  }
+}
+
+exports.getMALList = async (session, db) => {
+  acc = await getAccessToken(session, db)
+  const entireList = await entireMALList(acc);
+  return entireList
+}
+
+
 
 exports.getImage = async (id, session, db) => {
   const check = await checkDatabase(id, db);
