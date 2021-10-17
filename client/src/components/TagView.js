@@ -1,13 +1,26 @@
-import { Box, Button, Wrap, Flex } from "@chakra-ui/react"
+import { Box, Button, Wrap, Flex, Text } from "@chakra-ui/react"
 import ShowCircles from "./ShowCircles";
+import { useParams } from "react-router";
+import React from "react";
+import axios from "axios";
 
-const TagView = ({ tag, data, main, session }) => {
-
-    const noCrossOver = (top, left, array) => 
-        (array.some(ele => 
-            (top < ele.top + 200 && top > ele.top - 200 && left < ele.left + 200 && left > ele.left - 200 )
-        ))
-    const posArray = [{top : 300, left:700}];
+const TagView = ({setTags}) => {
+    const tags = useParams().tags
+    setTags(tags)
+    const session = "asdas"
+    const [data, setData] = React.useState([]);
+    React.useEffect(() => {
+        axios({url:"/getTagInfo", method:"post", data:{tag:tags}})
+            .then((res) => {
+                setData(res.data.data.Page.media)
+            }
+            );
+    }, []);
+    const noCrossOver = (top, left, array) =>
+    (array.some(ele =>
+        (top < ele.top + 200 && top > ele.top - 200 && left < ele.left + 200 && left > ele.left - 200)
+    ))
+    const posArray = [{ top: 300, left: 700 }];
 
     for (let i = 0; i < data.length; i++) {
         let top = Math.floor(Math.random() * 650);
@@ -20,21 +33,22 @@ const TagView = ({ tag, data, main, session }) => {
             console.log(noCrossOver(top, left, posArray))
         }
 
-        posArray.push({ top: top, left: left})
+        posArray.push({ top: top, left: left })
     }
 
     console.log(posArray)
     return (
-        <Box w="100%">
-            <Button pos="absolute" right="50px" bottom="0px" colorScheme="whiteAlpha" onClick={() =>{ main("main")}}> asdasd </Button>
-            {/* <Box>{tag}</Box>
-            <Button colorScheme="whiteAlpha" onClick={() => main("main")}> Go Back </Button> */}
-            <Box pos="absolute" borderRadius="50%" bottom="45%" left="45%" border="1px" h="150px" w="150px"> {data[0].title.romaji} </Box>
-            {data.map((ani, index) =>
-                <ShowCircles  session = {session} bottom={posArray[index].top + "px"} left={posArray[index].left + "px"} title={ani.title.romaji} id={ani.idMal}>
-                </ShowCircles>)
-            } 
-        </Box>
+            <>
+            <Flex bg="gray.700" justify="center">
+                <Text m={2} fontSize="30px">{tags}</Text>
+            </Flex>
+            <Wrap m= {2} h="10px" w="90%">
+                {data.map((ani, index) =>
+                    <ShowCircles img={ani.coverImage.large}>
+                    </ShowCircles>)
+                }
+            </Wrap>
+            </>
     )
 
 }

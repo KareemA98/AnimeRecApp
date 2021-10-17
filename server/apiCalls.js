@@ -46,6 +46,12 @@ query($tag: String){
       idMal
       genres
       seasonYear
+      coverImage {
+        extraLarge
+        large
+        medium
+        color
+      }
       type
       startDate {
         year
@@ -68,13 +74,12 @@ query($tag: String){
 exports.anotherTry = async () => {
   const response = await axios({ method: "post", url: 'https://graphql.anilist.co', data: { query: NarutoQuery, variables: {} } });
   const tags = response.data.data.Media.tags;
-  axiosList = tags.map(tag => axios({ method: "post", url: 'https://graphql.anilist.co', data: { query: TagQuery, variables: { tag: tag.name } } }))
-  const tagResponse = await axios.all(axiosList)
-  const obj = {};
-  tagResponse.forEach((element, index) => {
-    obj[tags[index].name] = element.data.data.Page.media
-  })
-  return obj
+  return tags
+}
+
+exports.getTagsInfo = async (tag) => {
+ const response = await axios({ method: "post", url: 'https://graphql.anilist.co', data: { query: TagQuery, variables: { tag: tag } } })
+ return response.data
 }
 
 exports.getImage = async (id, session, db) => {
