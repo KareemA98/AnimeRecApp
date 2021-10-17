@@ -92,6 +92,7 @@ query($tag: String){
         name
       }
       title {
+        english
         romaji
       }
       

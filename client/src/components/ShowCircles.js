@@ -44,11 +44,16 @@ const ShowCircles = ({ img, data }) => {
                                 <Text noOfLines={12} color="gray.500"> {data.description} </Text>
                             </Container>
                         </Flex>
-                        <Flex justify="space-around">
+                        <Flex m={2} justify="space-around">
                             <Text p={2} w="300px" fontSize="20px"  color="gray.700"> Avalible On </Text>
                             <Wrap>
-                            {data.externalLinks.map(link => <Button onClick={() => window.location.href = link.url}>{link.site}</Button>) }
+                            {data.externalLinks.map(link => <Button onClick={() => window.open(link.url, '_blank')}>{link.site}</Button>) }
                             </Wrap>
+                        </Flex>
+                        <Flex justify="space-around">
+                            <Text color="gray.500"> Episodes: {data.episodes} </Text>
+                            <Text color="gray.500"> Status: {data.status} </Text>
+                            <Text color="gray.500"> Season Year: {data.seasonYear} </Text>
                         </Flex>
                     </ModalBody>
                 </ModalContent >

@@ -42,13 +42,13 @@ const ShowPage = ({ setAnime, setTags }) => {
             </Flex>
             <Switch>
                 <Route exact path={path}>
-                    <Flex wrap>
+                    <Wrap justify="center" w="99%">
                         {
                             data.map((key, index) =>
                                 <Button colorScheme="whiteAlpha" size="md" onClick={() => { setTag(key.name); history.push(url + '/' + key.name) }} borderRadius="50%" border="1px" width="150px" height="150px">{key.name}</Button>
                             )
                         }
-                    </Flex>
+                    </Wrap>
                 </Route>
                 <Route path={url + '/:tags'}>
                     <TagView setTags={setTags}></TagView>
