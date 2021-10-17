@@ -7,6 +7,7 @@ const base64url = require("base64url");
 const axios = require("axios")
 const querystring = require('querystring');
 const authWithMAL = require('./authWithMAL')
+const path = require('path');
 
 const PORT = process.env.PORT || 3001;
 
@@ -47,7 +48,7 @@ client.connect()
     const data = await apiCalls.anotherTry()
     res.send(data)
   });
-  
+
   app.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));
   });
