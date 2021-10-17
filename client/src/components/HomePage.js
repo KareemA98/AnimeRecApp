@@ -50,7 +50,7 @@ const HomePage = () => {
                 </VStack>
             </Box>
             <Link to="/courses"> asdasdad </Link>
-            <Button onClick={() => history.push(value)}>Submit</Button>
+            <Button onClick={() => history.replace('/' + value)}>Submit</Button>
         </VStack>
     )
 }
