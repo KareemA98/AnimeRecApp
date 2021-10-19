@@ -17,6 +17,8 @@ function App() {
   const [tag, setTags] = React.useState("tag")
   const [loggedIn, setLoggedIn] = React.useState(false)
   const [completed, setCompleted] = React.useState([])
+  const [hideWatched, setHideWatched] = React.useState(false)
+  const alterState = () => setHideWatched(prevCheck => !prevCheck)
   const [tan, setTan] = React.useState(8);
   const [cookies, setCookie, removeCookie] = useCookies(['challenge', 'session']);
   const history = useHistory();
@@ -58,8 +60,8 @@ function App() {
   return (
     <Router>
       <Box h="100vh" margin="0px" bg="gray.800">
-        <NavBar anime={anime} tag={tag} doAuth={doAuth} loggedIn={loggedIn} />
-        <Home setAnime={setAnime} setTags={setTags} completed={completed} />
+        <NavBar anime={anime} tag={tag} doAuth={doAuth} loggedIn={loggedIn} hideWatched={hideWatched} alterState={alterState} />
+        <Home setAnime={setAnime} setTags={setTags} completed={completed} hideWatched={hideWatched} />
       </Box>
     </Router>
 

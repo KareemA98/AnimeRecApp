@@ -4,18 +4,20 @@ import { useParams } from "react-router";
 import React from "react";
 import axios from "axios";
 
-const TagView = ({setTags, completed}) => {
+const TagView = ({setTags, completed, hideWatched}) => {
     const tags = useParams().tags
     setTags(tags)
     const session = "asdas"
     const [data, setData] = React.useState([]);
     React.useEffect(() => {
-        axios({url:"/getTagInfo", method:"post", data:{tag:tags, completed:completed}})
+        var comp = completed
+        if (!hideWatched) {comp = []}
+        axios({url:"/getTagInfo", method:"post", data:{tag:tags, completed:comp}})
             .then((res) => {
                 setData(res.data.data.Page.media)
             }
             );
-    }, []);
+    }, [hideWatched]);
     const noCrossOver = (top, left, array) =>
     (array.some(ele =>
         (top < ele.top + 200 && top > ele.top - 200 && left < ele.left + 200 && left > ele.left - 200)
