@@ -4,13 +4,13 @@ import { useParams } from "react-router";
 import React from "react";
 import axios from "axios";
 
-const TagView = ({setTags}) => {
+const TagView = ({setTags, completed}) => {
     const tags = useParams().tags
     setTags(tags)
     const session = "asdas"
     const [data, setData] = React.useState([]);
     React.useEffect(() => {
-        axios({url:"/getTagInfo", method:"post", data:{tag:tags}})
+        axios({url:"/getTagInfo", method:"post", data:{tag:tags, completed:completed}})
             .then((res) => {
                 setData(res.data.data.Page.media)
             }

@@ -53,12 +53,12 @@ query ($anime: String) {
 }
 `;
 var TagQuery = `
-query($tag: String){
+query($tag: String $idsNot:[Int]){
   Page(page: 1, perPage: 10) {
     pageInfo {
       total
     }
-    media(tag: $tag, type: ANIME, sort:POPULARITY_DESC) {
+    media(tag: $tag, type: ANIME, sort:POPULARITY_DESC idMal_not_in:$idsNot) {
       id
       idMal
       trailer {
@@ -116,8 +116,9 @@ exports.search = (term) => {
     })
 }
 
-exports.getTagsInfo = async (tag) => {
-  const response = await axios({ method: "post", url: 'https://graphql.anilist.co', data: { query: TagQuery, variables: { tag: tag } } })
+exports.getTagsInfo = async (tag, completed) => {
+  const ids = Object.keys(completed).map(pip => parseInt(pip))
+  const response = await axios({ method: "post", url: 'https://graphql.anilist.co', data: { query: TagQuery, variables: { tag: tag, idsNot: ids } } })
   return response.data
 }
 const getList = async (token, offset) => {

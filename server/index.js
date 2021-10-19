@@ -34,8 +34,7 @@ client.connect()
   });
   
   app.post("/getTagInfo", async (req, res) => {
-    console.log(req.body)
-    const data = await apiCalls.getTagsInfo(req.body.tag)
+    const data = await apiCalls.getTagsInfo(req.body.tag, req.body.completed)
     res.json(data)
   });
 

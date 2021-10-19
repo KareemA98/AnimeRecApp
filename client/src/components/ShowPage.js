@@ -18,7 +18,7 @@ import {
     useDisclosure
 } from "@chakra-ui/react"
 
-const ShowPage = ({ setAnime, setTags }) => {
+const ShowPage = ({ setAnime, setTags, completed }) => {
     let params = useParams()
     setAnime(params.value)
     console.log(params)
@@ -51,7 +51,7 @@ const ShowPage = ({ setAnime, setTags }) => {
                     </Wrap>
                 </Route>
                 <Route path={url + '/:tags'}>
-                    <TagView setTags={setTags}></TagView>
+                    <TagView setTags={setTags} completed={completed}></TagView>
                 </Route>
             </Switch>
         </>

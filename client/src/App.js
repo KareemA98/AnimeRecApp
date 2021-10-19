@@ -16,6 +16,7 @@ function App() {
   const [anime, setAnime] = React.useState("anime")
   const [tag, setTags] = React.useState("tag")
   const [loggedIn, setLoggedIn] = React.useState(false)
+  const [completed, setCompleted] = React.useState([])
   const [tan, setTan] = React.useState(8);
   const [cookies, setCookie, removeCookie] = useCookies(['challenge', 'session']);
   const history = useHistory();
@@ -43,8 +44,8 @@ function App() {
   }, []);
   React.useEffect(() => {
     if(loggedIn){
-      axios({url:"getMALList", method:"post", data:{session: cookies.session}})
-      .then(res => console.log(res))
+      axios({url:"/getMALList", method:"post", data:{session: cookies.session}})
+      .then(res => setCompleted(res.data))
       .catch(err => console.log(err))
     }
   }, [loggedIn]);
@@ -58,7 +59,7 @@ function App() {
     <Router>
       <Box h="100vh" margin="0px" bg="gray.800">
         <NavBar anime={anime} tag={tag} doAuth={doAuth} loggedIn={loggedIn} />
-        <Home setAnime={setAnime} setTags={setTags} />
+        <Home setAnime={setAnime} setTags={setTags} completed={completed} />
       </Box>
     </Router>
 
