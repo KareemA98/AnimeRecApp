@@ -53,8 +53,8 @@ query ($anime: String) {
 }
 `;
 var TagQuery = `
-query($tag: String $idsNot:[Int]){
-  Page(page: 1, perPage: 10) {
+query($tag: String $idsNot:[Int] $page:Int){
+  Page(page: $page, perPage: 15) {
     pageInfo {
       total
     }
@@ -116,9 +116,24 @@ exports.search = (term) => {
     })
 }
 
-exports.getTagsInfo = async (tag, completed) => {
+exports.AddToMal = async (session, id, db) => {
+  const token = await getAccessToken(session, db)
+  return axios({
+    method:"patch",
+    data: "status=plan_to_watch",
+    url: `https://api.myanimelist.net/v2/anime/${id}/my_list_status`,
+    headers: {Authorization: `Bearer ${token}`, 'content-type': "application/x-www-form-urlencoded"},
+  })
+  .then (res => {
+    console.log(res)
+    return res.data
+  } )
+  .catch(err => console.log(err))
+}
+
+exports.getTagsInfo = async (tag, completed, page) => {
   const ids = Object.keys(completed).map(pip => parseInt(pip))
-  const response = await axios({ method: "post", url: 'https://graphql.anilist.co', data: { query: TagQuery, variables: { tag: tag, idsNot: ids } } })
+  const response = await axios({ method: "post", url: 'https://graphql.anilist.co', data: { query: TagQuery, variables: { tag: tag, idsNot: ids, page: page } } })
   return response.data
 }
 const getList = async (token, offset) => {
@@ -129,11 +144,11 @@ const getList = async (token, offset) => {
     .catch(err => console.log(err))
 }
 
-const entireMALList = async (acc, offset = 0) =>{
+const entireMALList = async (acc, offset = 0) => {
   const results = await getList(acc, offset)
-  console.log("Retreiving data from API for numbers : " + offset);
-  if (results.length>0) {
-    return results.concat(await entireMALList(acc, offset+10));
+  // console.log("Retreiving data from API for numbers : " + offset);
+  if (results.length > 0) {
+    return results.concat(await entireMALList(acc, offset + 10));
   } else {
     return results;
   }

@@ -4,7 +4,8 @@ import {
     Button, Box, Image, useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, Lorem, ModalFooter, ModalBody,
     Tabs, TabList, Tab, TabPanel, TabPanels, Grid, GridItem, Text, Container, Flex, Wrap
 } from '@chakra-ui/react'
-const ShowCircles = ({ img, data }) => {
+import { useCookies } from 'react-cookie';
+const ShowCircles = ({ img, data, loggedIn }) => {
     // const [img, setImg] = React.useState("https://bit.ly/sage-adebayo")
     // const getImage = async(id) => {
     //     const response = await axios({url:"/getImage", method:"post", data:{malID:id, session:session}})
@@ -14,6 +15,20 @@ const ShowCircles = ({ img, data }) => {
     //     getImage(id)
     // }, [])
     const { isOpen, onOpen, onClose } = useDisclosure()
+    const [cookies, setCookie, removeCookie] = useCookies(['session']);
+    const addToMalList = () => {
+        const session = cookies.session
+        axios({
+            method:"post",
+            url:"/AddToMal",
+            data: {
+                session: session,
+                id: data.idMal
+            }
+        })
+        .then(res => console.log(res))
+        .catch(err => console.log(err))
+    }
     return (
         <>
             <Button
@@ -54,6 +69,9 @@ const ShowCircles = ({ img, data }) => {
                             <Text color="gray.500"> Episodes: {data.episodes} </Text>
                             <Text color="gray.500"> Status: {data.status} </Text>
                             <Text color="gray.500"> Season Year: {data.seasonYear} </Text>
+                        </Flex>
+                        <Flex justify="flex-end">
+                        {loggedIn ? <Button onClick={addToMalList}>Add to MAL List</Button>: <Text> not logged in </Text>}
                         </Flex>
                     </ModalBody>
                 </ModalContent >

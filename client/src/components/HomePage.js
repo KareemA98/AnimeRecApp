@@ -4,14 +4,14 @@ import { BrowserRouter as Router, Switch, Route, Redirect, useHistory, useRouteM
 import React from 'react';
 import axios from 'axios';
 import ShowPage from './ShowPage';
-const Home = ({ setAnime, setTags, completed, hideWatched }) => {
+const Home = ({ setAnime, setTags, completed, hideWatched, loggedIn }) => {
     return (
             <Switch>
                 <Route exact path="/">
                     <HomePage />
                 </Route>
                 <Route path={"/:value"}>
-                    <ShowPage setTags={setTags} setAnime={setAnime} completed={completed} hideWatched={hideWatched} />
+                    <ShowPage setTags={setTags} setAnime={setAnime} completed={completed} hideWatched={hideWatched} loggedIn={loggedIn} />
                 </Route>
             </Switch>
     )

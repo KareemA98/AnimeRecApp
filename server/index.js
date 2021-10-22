@@ -34,7 +34,7 @@ client.connect()
   });
   
   app.post("/getTagInfo", async (req, res) => {
-    const data = await apiCalls.getTagsInfo(req.body.tag, req.body.completed)
+    const data = await apiCalls.getTagsInfo(req.body.tag, req.body.completed, req.body.page)
     res.json(data)
   });
 
@@ -46,6 +46,11 @@ client.connect()
       obj[element.node.id] = element.list_status.status
     });
     res.send(obj)
+  })
+
+  app.post("/AddToMal", async (req, res) => {
+    const data = await apiCalls.AddToMal(req.body.session, req.body.id, db)
+    res.send(data)
   })
 
 
