@@ -5,7 +5,7 @@ import {
     Tabs, TabList, Tab, TabPanel, TabPanels, Grid, GridItem, Text, Container, Flex, Wrap
 } from '@chakra-ui/react'
 import { useCookies } from 'react-cookie';
-const ShowCircles = ({ img, data, loggedIn }) => {
+const ShowCircles = ({ img, data, loggedIn, completed }) => {
     // const [img, setImg] = React.useState("https://bit.ly/sage-adebayo")
     // const getImage = async(id) => {
     //     const response = await axios({url:"/getImage", method:"post", data:{malID:id, session:session}})
@@ -14,6 +14,22 @@ const ShowCircles = ({ img, data, loggedIn }) => {
     // React.useEffect(() => {
     //     getImage(id)
     // }, [])
+    const background = () => {
+        switch(completed[data.idMal]) {
+            case "completed" :
+               return  "blue"
+            case "watching" :
+                return "green"
+            case "on_hold" :
+                return "yellow"
+            case "dropped" : 
+                return "red"
+            case "plan_to_watch":
+                return "purple"
+            default :
+                return "white"
+        }
+    }
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [cookies, setCookie, removeCookie] = useCookies(['session']);
     const addToMalList = () => {
@@ -35,6 +51,7 @@ const ShowCircles = ({ img, data, loggedIn }) => {
                 onClick={onOpen}
                 boxSize="230px"
                 borderRadius="full"
+                bg={background}
             >
                 <Image
                     borderRadius="full"
@@ -71,7 +88,7 @@ const ShowCircles = ({ img, data, loggedIn }) => {
                             <Text color="gray.500"> Season Year: {data.seasonYear} </Text>
                         </Flex>
                         <Flex justify="flex-end">
-                        {loggedIn ? <Button onClick={addToMalList}>Add to MAL List</Button>: <Text> not logged in </Text>}
+                        {loggedIn ? <Button isDisabled={data.idMal in completed } onClick={addToMalList}>Add to MAL List</Button>: <Text> not logged in </Text>}
                         </Flex>
                     </ModalBody>
                 </ModalContent >

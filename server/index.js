@@ -28,7 +28,6 @@ client.connect()
   app.use(express.static(path.resolve(__dirname, '../client/build')));
 
   app.post("/getImage", async (req, res) => {
-    console.log(req.body)
     const data = await apiCalls.getImage(req.body.malID, req.body.session, db)
     res.send({data:data})
   });

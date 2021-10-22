@@ -42,7 +42,7 @@ const TagView = ({ setTags, completed, hideWatched, loggedIn }) => {
         <Flex m={3} flexDirection="column" >
             <Wrap spacing={3} m={2} justify="center" align="center">
                 {data.slice(0, -3).map((ani, index) =>
-                    <ShowCircles data={ani} img={ani.coverImage.large} loggedIn={loggedIn}>
+                    <ShowCircles data={ani} completed={completed} img={ani.coverImage.large} loggedIn={loggedIn}>
                     </ShowCircles>)
                 }
             </Wrap>
@@ -50,7 +50,7 @@ const TagView = ({ setTags, completed, hideWatched, loggedIn }) => {
                 <Button isDisabled={page == 1} onClick={() => setPage(old => old- 1)} w="150px" h="150px" size="lg">Previous</Button>
                 <Spacer />
             {data.slice(-3).map((ani, index) =>
-                <ShowCircles data={ani} img={ani.coverImage.large} loggedIn={loggedIn}>
+                <ShowCircles data={ani} img={ani.coverImage.large} completed={completed} loggedIn={loggedIn}>
                 </ShowCircles>)
             }
                 <Spacer/>

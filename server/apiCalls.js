@@ -132,12 +132,12 @@ exports.AddToMal = async (session, id, db) => {
 }
 
 exports.getTagsInfo = async (tag, completed, page) => {
-  const ids = Object.keys(completed).map(pip => parseInt(pip))
-  const response = await axios({ method: "post", url: 'https://graphql.anilist.co', data: { query: TagQuery, variables: { tag: tag, idsNot: ids, page: page } } })
+  const onlyCompleted = Object.entries(completed).filter(type => type[1] == "completed").map(pip => parseInt(pip))
+  const response = await axios({ method: "post", url: 'https://graphql.anilist.co', data: { query: TagQuery, variables: { tag: tag, idsNot: onlyCompleted, page: page } } })
   return response.data
 }
 const getList = async (token, offset) => {
-  return axios({ method: "get", url: `https://api.myanimelist.net/v2/users/@me/animelist?offset=${offset}&status=completed&fields=list_status`, headers: { Authorization: `Bearer ${token}` } })
+  return axios({ method: "get", url: `https://api.myanimelist.net/v2/users/@me/animelist?offset=${offset}&fields=list_status`, headers: { Authorization: `Bearer ${token}` } })
     .then((res) => {
       return res.data.data
     })
