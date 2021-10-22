@@ -51,16 +51,23 @@ function App() {
       .catch(err => console.log(err))
     }
   }, [loggedIn]);
+
   const doAuth = () => {
     const code_verifier = cryptoRandomString({ length: 128, type: 'url-safe' });
     setCookie('challenge', code_verifier)
     window.location.href = "https://myanimelist.net/v1/oauth2/authorize?client_id=98ffcb05491c6a0d5c69cecfcb92a2d2&code_challenge=" + code_verifier + "&response_type=code&code_challenge_method=plain"
   }
 
+  const logOut = () => {
+    removeCookie('session')
+    setLoggedIn(false)
+    setCompleted([])
+  }
+
   return (
     <Router>
       <Box h="100vh" margin="0px" bg="gray.800">
-        <NavBar anime={anime} tag={tag} doAuth={doAuth} loggedIn={loggedIn} hideWatched={hideWatched} alterState={alterState} />
+        <NavBar anime={anime} tag={tag} doAuth={doAuth} loggedIn={loggedIn} hideWatched={hideWatched} alterState={alterState} logOut={logOut} />
         <Home setAnime={setAnime} setTags={setTags} completed={completed} hideWatched={hideWatched} loggedIn={loggedIn} />
       </Box>
     </Router>
