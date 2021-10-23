@@ -5,7 +5,7 @@ import cryptoRandomString from 'crypto-random-string';
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
 import TagView from "./TagView";
-import { useHistory, useRouteMatch, BrowserRouter as Router, Switch, Route, useParams } from "react-router-dom";
+import { useHistory, useRouteMatch, BrowserRouter as Router, Switch, Route, useParams, Redirect } from "react-router-dom";
 import {
     Modal,
     ModalOverlay,
@@ -19,9 +19,10 @@ import {
 } from "@chakra-ui/react"
 
 const ShowPage = ({ setAnime, setTags, completed, hideWatched, loggedIn }) => {
-    let params = useParams()
-    setAnime(params.value)
+    const urlSearchParams = new URLSearchParams(window.location.search);
+    const params = Object.fromEntries(urlSearchParams.entries());
     console.log(params)
+    setAnime(params.val)
     const [data, setData] = React.useState([]);
     const [main, setMain] = React.useState("main")
     const [cookies, setCookie, removeCookie] = useCookies(['challenge', 'session']);
@@ -32,17 +33,18 @@ const ShowPage = ({ setAnime, setTags, completed, hideWatched, loggedIn }) => {
     let { path, url } = useRouteMatch();
     console.log([path, url])
     React.useEffect(() => {
-        axios({ method: "post", url: "/getShow", data: { show: params.value } })
+        axios({ method: "post", url: "/getShow", data: { show: params.val } })
             .then((res) => setData(res.data))
     }, []);
+    if (!params.val) return <Redirect to="/"></Redirect> 
     return (
         <>
             <Switch>
                 <Route exact path={path}>
-                    <Wrap justify="center" w="99%">
+                    <Wrap spacing="30px" m={4} justify="center" >
                         {
                             data.map((key, index) =>
-                                <Button colorScheme="whiteAlpha" size="md" onClick={() => { setTag(key.name); history.push(url + '/' + key.name) }} borderRadius="50%" border="1px" width="150px" height="150px">{key.name}</Button>
+                                <Button colorScheme="whiteAlpha" size="md" onClick={() => { setTag(key.name); history.push('/Choice?tag=' + key.name) }} borderRadius="50%" border="1px" width="150px" height="150px">{key.name}</Button>
                             )
                         }
                     </Wrap>

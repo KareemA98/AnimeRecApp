@@ -5,14 +5,15 @@ import React from "react";
 import axios from "axios";
 
 const TagView = ({ setTags, completed, hideWatched, loggedIn }) => {
-    const tags = useParams().tags
-    setTags(tags)
+    const urlSearchParams = new URLSearchParams(window.location.search);
+    const params = Object.fromEntries(urlSearchParams.entries());
+    setTags(params.tag)
     const [data, setData] = React.useState([]);
     const [page, setPage] = React.useState(1);
     React.useEffect(() => {
         var comp = completed
         if (!hideWatched) { comp = [] }
-        axios({ url: "/getTagInfo", method: "post", data: { tag: tags, completed: comp, page:page } })
+        axios({ url: "/getTagInfo", method: "post", data: { tag: params.tag, completed: comp, page:page } })
             .then((res) => {
                 setData(res.data.data.Page.media)
             });

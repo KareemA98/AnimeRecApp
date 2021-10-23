@@ -4,14 +4,18 @@ import { BrowserRouter as Router, Switch, Route, Redirect, useHistory, useRouteM
 import React from 'react';
 import axios from 'axios';
 import ShowPage from './ShowPage';
+import TagView from './TagView';
 const Home = ({ setAnime, setTags, completed, hideWatched, loggedIn }) => {
     return (
             <Switch>
                 <Route exact path="/">
                     <HomePage />
                 </Route>
-                <Route path={"/:value"}>
+                <Route path={"/Show"}>
                     <ShowPage setTags={setTags} setAnime={setAnime} completed={completed} hideWatched={hideWatched} loggedIn={loggedIn} />
+                </Route>
+                <Route path={"/Choice"}>
+                    <TagView setTags={setTags} completed={completed} hideWatched={hideWatched} loggedIn={loggedIn}></TagView>
                 </Route>
             </Switch>
     )
@@ -56,10 +60,10 @@ const HomePage = () => {
                     </InputRightElement>
                 </InputGroup>
                 <VStack p={4}>
-                    {suggestions.map(val => <Box as="button" onClick={() => history.push('/' + val)} bg="white" w="100%">{val}</Box>)}
+                    {suggestions.map(val => <Box as="button" onClick={() => history.push('/Show?val=' + val)} bg="white" w="100%">{val}</Box>)}
                 </VStack>
             </Box>
-            <Button onClick={() => history.push('/' + value)}>Submit</Button>
+            {/* <Button onClick={() => history.push('/' + value)}>Submit</Button> */}
         </VStack>
     )
 }
