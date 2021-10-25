@@ -68,7 +68,7 @@ function App() {
     <Router>
       <Box h="100vh" margin="0px" bg="gray.800">
         <NavBar anime={anime} tag={tag} doAuth={doAuth} loggedIn={loggedIn} hideWatched={hideWatched} alterState={alterState} logOut={logOut} />
-        <Home setAnime={setAnime} setTags={setTags} completed={completed} hideWatched={hideWatched} loggedIn={loggedIn} />
+        <Home setAnime={setAnime} setTags={setTags} completed={completed} hideWatched={hideWatched} loggedIn={loggedIn} setCompleted={setCompleted} />
       </Box>
     </Router>
 

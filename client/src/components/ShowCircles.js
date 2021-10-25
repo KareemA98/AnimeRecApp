@@ -5,7 +5,7 @@ import {
     Tabs, TabList, Tab, TabPanel, TabPanels, Grid, GridItem, Text, Container, Flex, Wrap
 } from '@chakra-ui/react'
 import { useCookies } from 'react-cookie';
-const ShowCircles = ({ img, data, loggedIn, completed }) => {
+const ShowCircles = ({ img, data, loggedIn, completed, setCompleted }) => {
     // const [img, setImg] = React.useState("https://bit.ly/sage-adebayo")
     // const getImage = async(id) => {
     //     const response = await axios({url:"/getImage", method:"post", data:{malID:id, session:session}})
@@ -32,7 +32,9 @@ const ShowCircles = ({ img, data, loggedIn, completed }) => {
     }
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [cookies, setCookie, removeCookie] = useCookies(['session']);
+    const [sendingToMal, setSendingToMal] = React.useState(false)
     const addToMalList = () => {
+        setSendingToMal(true)
         const session = cookies.session
         axios({
             method:"post",
@@ -42,7 +44,16 @@ const ShowCircles = ({ img, data, loggedIn, completed }) => {
                 id: data.idMal
             }
         })
-        .then(res => console.log(res))
+        .then(res => {
+            console.log(res)
+            setCompleted(old => 
+                {
+                    old[data.idMal] = "plan_to_watch"
+                    return old
+                }
+            )
+            setSendingToMal(false)
+        })
         .catch(err => console.log(err))
     }
     return (
@@ -88,7 +99,10 @@ const ShowCircles = ({ img, data, loggedIn, completed }) => {
                             <Text color="gray.500"> Season Year: {data.seasonYear} </Text>
                         </Flex>
                         <Flex justify="flex-end">
-                        {loggedIn ? <Button isDisabled={data.idMal in completed } onClick={addToMalList}>Add to MAL List</Button>: <Text> not logged in </Text>}
+                        {loggedIn ? 
+                        <Button isDisabled={data.idMal in completed} isLoading={sendingToMal} onClick={addToMalList}>Add to MAL List</Button>
+                        : 
+                        <Text> not logged in </Text>}
                         </Flex>
                     </ModalBody>
                 </ModalContent >

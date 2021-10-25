@@ -5,7 +5,7 @@ import React from 'react';
 import axios from 'axios';
 import ShowPage from './ShowPage';
 import TagView from './TagView';
-const Home = ({ setAnime, setTags, completed, hideWatched, loggedIn }) => {
+const Home = ({ setAnime, setTags, completed, hideWatched, loggedIn, setCompleted }) => {
     return (
             <Switch>
                 <Route exact path="/">
@@ -15,7 +15,7 @@ const Home = ({ setAnime, setTags, completed, hideWatched, loggedIn }) => {
                     <ShowPage setTags={setTags} setAnime={setAnime} completed={completed} hideWatched={hideWatched} loggedIn={loggedIn} />
                 </Route>
                 <Route path={"/Choice"}>
-                    <TagView setTags={setTags} completed={completed} hideWatched={hideWatched} loggedIn={loggedIn}></TagView>
+                    <TagView setTags={setTags} completed={completed} hideWatched={hideWatched} loggedIn={loggedIn} setCompleted={setCompleted}></TagView>
                 </Route>
             </Switch>
     )

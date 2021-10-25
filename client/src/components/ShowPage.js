@@ -36,24 +36,16 @@ const ShowPage = ({ setAnime, setTags, completed, hideWatched, loggedIn }) => {
         axios({ method: "post", url: "/getShow", data: { show: params.val } })
             .then((res) => setData(res.data))
     }, []);
-    if (!params.val) return <Redirect to="/"></Redirect> 
+    if (!params.val) return <Redirect to="/"></Redirect>
     return (
-        <>
-            <Switch>
-                <Route exact path={path}>
-                    <Wrap spacing="30px" m={4} justify="center" >
-                        {
-                            data.map((key, index) =>
-                                <Button colorScheme="whiteAlpha" size="md" onClick={() => { setTag(key.name); history.push('/Choice?tag=' + key.name) }} borderRadius="50%" border="1px" width="150px" height="150px">{key.name}</Button>
-                            )
-                        }
-                    </Wrap>
-                </Route>
-                <Route path={url + '/:tags'}>
-                    <TagView setTags={setTags} completed={completed} hideWatched={hideWatched} loggedIn={loggedIn}></TagView>
-                </Route>
-            </Switch>
-        </>
+        <Wrap spacing="30px" m={4} justify="center" >
+            {
+                data.map((key, index) =>
+                    <Button colorScheme="whiteAlpha" size="md" onClick={() => { setTag(key.name); history.push('/Choice?tag=' + key.name) }} borderRadius="50%" border="1px" width="150px" height="150px">{key.name}</Button>
+                )
+            }
+        </Wrap>
+
     )
 }
 const Show = () => {
