@@ -160,8 +160,6 @@ exports.getMALList = async (session, db) => {
   return entireList
 }
 
-
-
 exports.getImage = async (id, session, db) => {
   const check = await checkDatabase(id, db);
   console.log(check)

@@ -1,20 +1,21 @@
-import logo from './logo.svg';
 import './App.css';
-import { Box, Wrap, Center, Flex, Button, Link, Text, Spacer } from "@chakra-ui/react"
+import { Box, Flex, Button, Spacer, useDisclosure } from "@chakra-ui/react"
 import React from "react";
 import TagView from './components/TagView';
-import { useAuth0 } from '@auth0/auth0-react';
 import cryptoRandomString from 'crypto-random-string';
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
-import Home from './components/HomePage';
-import { BrowserRouter as Router, Switch, Route, useHistory } from 'react-router-dom';
-import ShowPage from './components/ShowPage';
-import NavBar from './components/NavBar';
+import HomePage from './components/HomePage';
+import { BrowserRouter as Router, useHistory } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faArrowCircleRight } from '@fortawesome/free-solid-svg-icons'
+import FilterBox from './components/filterBox';
+
 
 function App() {
   const [anime, setAnime] = React.useState("anime")
-  const [tag, setTags] = React.useState("tag")
+  const [tags, setTags] = React.useState([])
+  console.log(tags)
   const [loggedIn, setLoggedIn] = React.useState(false)
   const [completed, setCompleted] = React.useState([])
   const [hideWatched, setHideWatched] = React.useState(false)
@@ -22,6 +23,9 @@ function App() {
   const [tan, setTan] = React.useState(8);
   const [cookies, setCookie, removeCookie] = useCookies(['challenge', 'session']);
   const history = useHistory();
+  const [show, setShow] = React.useState(null)
+  const [selectedTags, setSelectedTags] = React.useState(null)
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
   // Here we define our query as a multi-line string
   // Storing it in a separate .graphql/.gql file is also possible
@@ -45,10 +49,10 @@ function App() {
     }
   }, []);
   React.useEffect(() => {
-    if(loggedIn){
-      axios({url:"/getMALList", method:"post", data:{session: cookies.session}})
-      .then(res => setCompleted(res.data))
-      .catch(err => console.log(err))
+    if (loggedIn) {
+      axios({ url: "/getMALList", method: "post", data: { session: cookies.session } })
+        .then(res => setCompleted(res.data))
+        .catch(err => console.log(err))
     }
   }, [loggedIn]);
 
@@ -66,10 +70,26 @@ function App() {
 
   return (
     <Router>
-      <Box h="100vh" margin="0px" bg="gray.800">
-        <NavBar anime={anime} tag={tag} doAuth={doAuth} loggedIn={loggedIn} hideWatched={hideWatched} alterState={alterState} logOut={logOut} />
-        <Home setAnime={setAnime} setTags={setTags} completed={completed} hideWatched={hideWatched} loggedIn={loggedIn} setCompleted={setCompleted} />
-      </Box>
+      <Flex>
+        <Box as="button" _hover={{ bg: "gray.300" }} w="10vh" h="100vh" bg="gray.400" onClick={onOpen}>
+          <FontAwesomeIcon size="lg" icon={faArrowCircleRight} />
+        </Box>
+        <Box h="100vh" w="200vh" bg="gray.800">
+          {/* <NavBar anime={anime} tag={tag} doAuth={doAuth} loggedIn={loggedIn} hideWatched={hideWatched} alterState={alterState} logOut={logOut} /> */}
+          <Flex alignItems="initial" justify="space-evenly" >
+            <Spacer/>
+            <HomePage setAnime={setAnime} setTags={setTags} completed={completed} hideWatched={hideWatched} loggedIn={loggedIn} setCompleted={setCompleted} setShow={setShow} />
+            {loggedIn ? <Button m={3} marginLeft="100px"  onClick={logOut}>Logout of MAL</Button> :
+            <Button m={3} marginLeft="100px"  onClick={doAuth}>Login to MAL hgjhbjhb</Button>}
+          </Flex>
+          <TagView setTags={setTags} completed={completed} hideWatched={hideWatched}
+           loggedIn={loggedIn} setCompleted={setCompleted} show={show} setSelectedTags={setSelectedTags}
+           selectedTags={selectedTags}
+            ></TagView>
+          {JSON.stringify(selectedTags)}
+        </Box>
+      </Flex>
+        <FilterBox isOpen={isOpen} onClose={onClose} tags={tags} selectedTags={selectedTags}/>
     </Router>
 
   );

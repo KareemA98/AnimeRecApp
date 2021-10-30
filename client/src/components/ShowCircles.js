@@ -60,13 +60,13 @@ const ShowCircles = ({ img, data, loggedIn, completed, setCompleted }) => {
         <>
             <Button
                 onClick={onOpen}
-                boxSize="230px"
+                boxSize="170px"
                 borderRadius="full"
                 bg={background}
             >
                 <Image
                     borderRadius="full"
-                    boxSize="200px"
+                    boxSize="140px"
                     src={img}
                     alt="Segun Adebayo"
                 />

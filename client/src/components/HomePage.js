@@ -5,24 +5,7 @@ import React from 'react';
 import axios from 'axios';
 import ShowPage from './ShowPage';
 import TagView from './TagView';
-const Home = ({ setAnime, setTags, completed, hideWatched, loggedIn, setCompleted }) => {
-    return (
-            <Switch>
-                <Route exact path="/">
-                    <HomePage />
-                </Route>
-                <Route path={"/Show"}>
-                    <ShowPage setTags={setTags} setAnime={setAnime} completed={completed} hideWatched={hideWatched} loggedIn={loggedIn} />
-                </Route>
-                <Route path={"/Choice"}>
-                    <TagView setTags={setTags} completed={completed} hideWatched={hideWatched} loggedIn={loggedIn} setCompleted={setCompleted}></TagView>
-                </Route>
-            </Switch>
-    )
-
-}
-
-const HomePage = () => {
+const HomePage = ({setShow}) => {
     const [value, setValue] = React.useState("")
     const [loading, setLoading] = React.useState(false)
     const [suggestions, setSuggestions] = React.useState([])
@@ -49,7 +32,7 @@ const HomePage = () => {
     }
     return (
         <VStack align="center" justify="center">
-            <Text fontSize="100px" color="white">What Anime Should I Watch Next?</Text>
+            <Text fontSize="80px" color="white">What Anime Should I Watch Next?</Text>
             {loading ? <Box>"adsasd" </Box> : <Box>"dfsdf" </Box>}
 
             <Box w="50%" >
@@ -60,11 +43,11 @@ const HomePage = () => {
                     </InputRightElement>
                 </InputGroup>
                 <VStack p={4}>
-                    {suggestions.map(val => <Box as="button" onClick={() => history.push('/Show?val=' + val)} bg="white" w="100%">{val}</Box>)}
+                    {suggestions.map(val => <Box as="button" onClick={() => {setValue(val);setSuggestions([]);setShow(val)}} bg="white" w="100%">{val}</Box>)}
                 </VStack>
             </Box>
             {/* <Button onClick={() => history.push('/' + value)}>Submit</Button> */}
         </VStack>
     )
 }
-export default Home
+export default HomePage
