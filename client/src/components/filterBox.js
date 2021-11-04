@@ -7,10 +7,11 @@ import React from "react"
 
 const FilterBox = ({ onClose, isOpen, tags, selectedTags }) => {
     const [filterTags, setFilterTags] = React.useState(selectedTags)
-    const as = useCheckboxGroup
     React.useEffect(() =>{
         setFilterTags(selectedTags)
     }, [selectedTags])
+
+    const checkFilterButton = () => filterTags.length < 1
     return (
         <Drawer placement="left" onClose={onClose} isOpen={isOpen}>
             <DrawerOverlay />
@@ -18,11 +19,11 @@ const FilterBox = ({ onClose, isOpen, tags, selectedTags }) => {
                 <DrawerHeader borderBottomWidth="1px">Filtering</DrawerHeader>
                 <DrawerBody>
                     <Flex flexDirection="column" justify="left">
-                        <CheckboxGroup onChange={(value) => {console.log(value)}}>
-                        {tags.map(tag => <Checkbox> {tag.name} </Checkbox>)}
+                        <CheckboxGroup value={filterTags} onChange={val => setFilterTags(val)}>
+                        {tags.map(tag => <Checkbox value={tag.name}> {tag.name} </Checkbox>)}
                         </CheckboxGroup>
                         
-                        <Button>Filter</Button>
+                        <Button isDisabled={checkFilterButton()}>Filter</Button>
                     </Flex>
                 </DrawerBody>
             </DrawerContent>

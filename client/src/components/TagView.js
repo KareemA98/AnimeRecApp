@@ -17,7 +17,7 @@ const TagView = ({ setTags, completed, hideWatched, loggedIn, setCompleted, show
             const tags = await axios({ url: "/getShow", method: "post", data: { show: show } })
             console.log(tags)
             setTags(tags.data)
-            setSelectedTags(tags.data[0].name)
+            setSelectedTags([tags.data[0].name])
         }
     }, [show]);
 

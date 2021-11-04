@@ -81,7 +81,7 @@ function App() {
             <Spacer/>
             <HomePage setShow={setShow} suggestions={suggestions} setSuggestions={setSuggestions}  />
             {loggedIn ? <Button m={3} marginLeft="100px"  onClick={logOut}>Logout of MAL</Button> :
-            <Button m={3} marginLeft="100px"  onClick={doAuth}>Login to MAL hgjhbjhb</Button>}
+            <Button m={3} marginLeft="100px"  onClick={doAuth}>Login to MAL</Button>}
           </Flex>
           { suggestions.length < 1 ? 
           <TagView setTags={setTags} completed={completed} hideWatched={hideWatched}
@@ -90,7 +90,6 @@ function App() {
             ></TagView> :
             <Box> suggestion over 1 </Box> 
           }
-          {JSON.stringify(selectedTags)}
         </Box>
       </Flex>
         <FilterBox isOpen={isOpen} onClose={onClose} tags={tags} selectedTags={selectedTags}/>
