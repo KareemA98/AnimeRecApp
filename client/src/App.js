@@ -25,6 +25,7 @@ function App() {
   const history = useHistory();
   const [show, setShow] = React.useState(null)
   const [selectedTags, setSelectedTags] = React.useState(null)
+  const [suggestions, setSuggestions] = React.useState([])
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   // Here we define our query as a multi-line string
@@ -78,14 +79,17 @@ function App() {
           {/* <NavBar anime={anime} tag={tag} doAuth={doAuth} loggedIn={loggedIn} hideWatched={hideWatched} alterState={alterState} logOut={logOut} /> */}
           <Flex alignItems="initial" justify="space-evenly" >
             <Spacer/>
-            <HomePage setAnime={setAnime} setTags={setTags} completed={completed} hideWatched={hideWatched} loggedIn={loggedIn} setCompleted={setCompleted} setShow={setShow} />
+            <HomePage setShow={setShow} suggestions={suggestions} setSuggestions={setSuggestions}  />
             {loggedIn ? <Button m={3} marginLeft="100px"  onClick={logOut}>Logout of MAL</Button> :
             <Button m={3} marginLeft="100px"  onClick={doAuth}>Login to MAL hgjhbjhb</Button>}
           </Flex>
+          { suggestions.length < 1 ? 
           <TagView setTags={setTags} completed={completed} hideWatched={hideWatched}
            loggedIn={loggedIn} setCompleted={setCompleted} show={show} setSelectedTags={setSelectedTags}
            selectedTags={selectedTags}
-            ></TagView>
+            ></TagView> :
+            <Box> suggestion over 1 </Box> 
+          }
           {JSON.stringify(selectedTags)}
         </Box>
       </Flex>

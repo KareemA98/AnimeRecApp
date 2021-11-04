@@ -5,10 +5,9 @@ import React from 'react';
 import axios from 'axios';
 import ShowPage from './ShowPage';
 import TagView from './TagView';
-const HomePage = ({setShow}) => {
+const HomePage = ({setShow, suggestions, setSuggestions}) => {
     const [value, setValue] = React.useState("")
     const [loading, setLoading] = React.useState(false)
-    const [suggestions, setSuggestions] = React.useState([])
     const [lastTime, setLastTime] = React.useState(new Date)
     const history = useHistory();
 
