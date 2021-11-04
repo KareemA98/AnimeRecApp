@@ -24,7 +24,7 @@ function App() {
   const [cookies, setCookie, removeCookie] = useCookies(['challenge', 'session']);
   const history = useHistory();
   const [show, setShow] = React.useState(null)
-  const [selectedTags, setSelectedTags] = React.useState(null)
+  const [selectedTags, setSelectedTags] = React.useState([])
   const [suggestions, setSuggestions] = React.useState([])
   const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -92,7 +92,7 @@ function App() {
           }
         </Box>
       </Flex>
-        <FilterBox isOpen={isOpen} onClose={onClose} tags={tags} selectedTags={selectedTags}/>
+        <FilterBox isOpen={isOpen} onClose={onClose} tags={tags} selectedTags={selectedTags} setSelectedTags={setSelectedTags}/>
     </Router>
 
   );

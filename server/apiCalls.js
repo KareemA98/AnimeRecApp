@@ -57,6 +57,7 @@ query($tag: [String] $idsNot:[Int] $page:Int){
   Page(page: $page, perPage: 15) {
     pageInfo {
       total
+      lastPage
     }
     media(tag_in: $tag, type: ANIME, sort:POPULARITY_DESC idMal_not_in:$idsNot) {
       id

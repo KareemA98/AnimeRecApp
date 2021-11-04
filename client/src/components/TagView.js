@@ -1,4 +1,4 @@
-import { Box, Button, Wrap, Flex, Text, Spacer, Checkbox } from "@chakra-ui/react"
+import { Box, Button, Wrap, Flex, Text, Spacer, Checkbox, VStack, Spinner } from "@chakra-ui/react"
 import ShowCircles from "./ShowCircles";
 import { useParams } from "react-router";
 import React from "react";
@@ -9,25 +9,46 @@ const TagView = ({ setTags, completed, hideWatched, loggedIn, setCompleted, show
     const params = Object.fromEntries(urlSearchParams.entries());
     const [data, setData] = React.useState([]);
     const [page, setPage] = React.useState(1);
+    const [pageData, setPageData] = React.useState({})
+    const [loading, setLoading] = React.useState(false)
     React.useEffect(async () => {
         if (show) {
+            setLoading(true)
             console.log(show)
             var comp = completed
             if (!hideWatched) { comp = [] }
             const tags = await axios({ url: "/getShow", method: "post", data: { show: show } })
             console.log(tags)
             setTags(tags.data)
-            setSelectedTags([tags.data[0].name])
+            if(tags.data[0]){
+                setSelectedTags([tags.data[0].name])
+            } else {
+                setSelectedTags([]) 
+            }
         }
     }, [show]);
+
+
+
+    React.useEffect( async () => {
+        if (selectedTags) {
+            setPage(1);
+            const returnData = await axios({ url: "/getTagInfo", method: "post", data: { tag: selectedTags, completed:completed, page:page } })
+            console.log(returnData)
+            setPageData(returnData.data.data.Page.pageInfo);
+            setData(returnData.data.data.Page.media);
+            setLoading(false)
+        }
+    }, [selectedTags, hideWatched])
 
     React.useEffect( async () => {
         if (selectedTags) {
             const returnData = await axios({ url: "/getTagInfo", method: "post", data: { tag: selectedTags, completed:completed, page:page } })
             console.log(returnData)
-            setData(returnData.data.data.Page.media)
+            setPageData(returnData.data.data.Page.pageInfo);
+            setData(returnData.data.data.Page.media);
         }
-    }, [selectedTags, page, hideWatched])
+    }, [page])
 
     // const noCrossOver = (top, left, array) =>
     // (array.some(ele =>
@@ -49,7 +70,11 @@ const TagView = ({ setTags, completed, hideWatched, loggedIn, setCompleted, show
     //     posArray.push({ top: top, left: left })
     // }
 
+    if(loading) return <Spinner color="white"> asdasd</Spinner>
+
     return (
+
+         data.length > 1 ? 
         <Flex m={3} flexDirection="column" >
             <Wrap spacing={5} m={2} justify="center" >
                 {data.slice(0, -3).map((ani, index) =>
@@ -65,9 +90,14 @@ const TagView = ({ setTags, completed, hideWatched, loggedIn, setCompleted, show
                     </ShowCircles>)
                 }
                 <Spacer />
-                <Button w="150px" h="150px" onClick={() => setPage(old => old + 1)} >Next</Button>
+                <VStack>
+                    <Text color="white"> {pageData.total} </Text>
+                    <Text color="white"> {`Page ${page} out of ${pageData.lastPage} pages`} </Text>
+                    <Button isDisabled={page == pageData.lastPage} w="150px" h="150px" onClick={() => setPage(old => old + 1)} >Next</Button>
+                </VStack>
             </Wrap>
-        </Flex>
+        </Flex> :
+        <Text color="white">No results found</Text>
     )
 
 }

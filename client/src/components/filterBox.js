@@ -5,8 +5,9 @@ import {
 } from "@chakra-ui/react"
 import React from "react"
 
-const FilterBox = ({ onClose, isOpen, tags, selectedTags }) => {
-    const [filterTags, setFilterTags] = React.useState(selectedTags)
+const FilterBox = ({ onClose, isOpen, tags, selectedTags, setSelectedTags }) => {
+    const [filterTags, setFilterTags] = React.useState([])
+    console.log(filterTags)
     React.useEffect(() =>{
         setFilterTags(selectedTags)
     }, [selectedTags])
@@ -23,7 +24,7 @@ const FilterBox = ({ onClose, isOpen, tags, selectedTags }) => {
                         {tags.map(tag => <Checkbox value={tag.name}> {tag.name} </Checkbox>)}
                         </CheckboxGroup>
                         
-                        <Button isDisabled={checkFilterButton()}>Filter</Button>
+                        <Button isDisabled={checkFilterButton()} onClick={() => setSelectedTags(filterTags)}>Filter</Button>
                     </Flex>
                 </DrawerBody>
             </DrawerContent>
